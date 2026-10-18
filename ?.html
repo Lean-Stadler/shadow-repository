@@ -2,11 +2,41 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Shadow Archive</title>
+    <meta charset="UTF-8">
+    <title>Shadow Archive</title>
 </head>
 <body>
-  <h1>SHADOW ARCHIVE</h1>
-  <p>Das Archiv wurde erfolgreich geladen.</p>
+
+    <h1>SHADOW ARCHIVE</h1>
+    <p>Bitte gib das Passwort ein:</p>
+
+    <input type="password" id="password">
+    <button onclick="checkPassword()">Entsperren</button>
+
+    <p id="message"></p>
+
+    <div id="secret" style="display: none;">
+        <h2>Zugriff gewährt!</h2>
+        <p>Willkommen im geheimen Schattenarchiv.</p>
+        <p>Hier kommt deine Nachricht von Elyas hin.</p>
+    </div>
+
+    <script>
+        function checkPassword() {
+
+            let password = document.getElementById("password").value;
+
+            if (password === "ELYAS") {
+                document.getElementById("secret").style.display = "block";
+                document.getElementById("message").innerText = "";
+            }
+            else {
+                document.getElementById("secret").style.display = "none";
+                document.getElementById("message").innerText = "Falsches Passwort!";
+            }
+
+        }
+    </script>
+
 </body>
 </html>
