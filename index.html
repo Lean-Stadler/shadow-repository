@@ -3,37 +3,269 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>E̷̡̨̨̮͉̟̰̼̰̹̖͍̳̯̱̫̺͓̟̼̦̫̝̰̟̮͈͌̃̽̌͋̓̓̽́̆̓̚͠Ļ̷͎͇̥̖͕͚̺̜̳̍͂̃͛̎Y̶̜̫͕̭͖̺̖̙͊̀̎̆̅̀̀̃̎̿̀͆͗̍̑̉̋̏͆̎̎̄̕A̷̬̋̇́́̈́̔̿̀̇͆͑̉̏̓̆̽̀̆̾͐́̽̽̓͜͝Ṡ̶̡̢͚̤̮̦͕͓̬̞̤̩̟͙̩́̂̅͆̔̀̀̈́́͘͘̕͝ͅ-̶͙̖̲̣͚̙̳̥͓̰̪̩̭̗̜͔̔̊̈́̏͂́̂̉̐̑̌́̈́̑́͂͛̽͒͗͘͜͠͝͝͠N̵̡͎̞͍̺̘͖̟͎̤͔̹͉͇̬͙̺̼͓͎͙̪͓̭̬̪͍̜̿̂͐͊͊͗͆̑͋̈́̌̈́͂̓́̈̌̈́̊̾̊̏̓̃͒͘͜͝͝ͅO̵̢͚͙̯͙͙̺͇̫̥͔̯̲͍̰̅̀̾̄̿̉͠T̵̢̛̯͖̲̳͎̟̟̘̫̗̰͙̟̈́̓̀̈́̇̏͗̇̕͝E̷̛̟̣̫̮̜͈̯͐̎̆̓̑͐̈́͋́̂̃͜0̷̨̡̺͚͍̟̝̟̗͇͈̍̓̈̌̐̿́̆ͅ1̵̨̢̡̛͔͈̪̬̰̮̳̰̰͓͚̹̟̻̖͉̹̘̖̤͚̬̞͕̘̒̈́̊̈̇̅̍</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ELYAS-NOTE01</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #080b08;
+            color: #55ff88;
+            font-family: "Courier New", monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Alte Monitor-Scanlines */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 3px,
+                rgba(0, 0, 0, 0.2) 4px
+            );
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .terminal {
+            width: 100%;
+            max-width: 650px;
+            background: #0c110d;
+            border: 1px solid #287a43;
+            padding: 30px;
+            box-shadow: 0 0 35px rgba(0, 255, 80, 0.08);
+            animation: startup 0.5s ease-out;
+        }
+
+        .system-info {
+            font-size: 12px;
+            color: #5b936b;
+            line-height: 1.8;
+            border-bottom: 1px dashed #287a43;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: clamp(23px, 5vw, 34px);
+            letter-spacing: 3px;
+            text-shadow: 0 0 12px #22aa55;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        p {
+            line-height: 1.7;
+        }
+
+        .warning {
+            color: #d8a857;
+            font-size: 13px;
+            margin-bottom: 25px;
+        }
+
+        .password-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        input {
+            flex: 1;
+            min-width: 0;
+            background: #050805;
+            border: 1px solid #327d48;
+            color: #66ff99;
+            padding: 13px;
+            font-family: inherit;
+            font-size: 16px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #66ff99;
+            box-shadow: 0 0 10px #144d29;
+        }
+
+        button, .secret-link {
+            background: #123a20;
+            border: 1px solid #55ff88;
+            color: #65ff91;
+            padding: 13px 18px;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.2s;
+        }
+
+        button:hover, .secret-link:hover {
+            background: #55ff88;
+            color: #050805;
+        }
+
+        #message {
+            color: #ff5555;
+            font-weight: bold;
+            min-height: 25px;
+            margin-top: 15px;
+        }
+
+        #secret {
+            display: none;
+            border-top: 1px dashed #287a43;
+            margin-top: 25px;
+            padding-top: 20px;
+        }
+
+        .success {
+            color: #85ffaa;
+            text-shadow: 0 0 8px #248343;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 9px;
+            height: 17px;
+            background: #55ff88;
+            vertical-align: middle;
+            animation: blink 1s steps(1) infinite;
+        }
+
+        .footer {
+            margin-top: 35px;
+            font-size: 11px;
+            color: #487454;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        @keyframes startup {
+            from {
+                opacity: 0;
+                transform: scaleY(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: scaleY(1);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .terminal {
+                padding: 20px;
+            }
+
+            .password-area {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-    <h1>SHADOW ARCHIVE</h1>
-    <p>Bitte gib das Passwort ein:</p>
+    <main class="terminal">
 
-    <input type="password" id="password">
-    <button onclick="checkPassword()">Entsperren</button>
+        <div class="system-info">
+            SHADOW_OS v1.0.1<br>
+            SYSTEM STATUS: ONLINE<br>
+            FILE: ELYAS-NOTE01<br>
+            ENCRYPTION: ACTIVE
+        </div>
 
-    <p id="message"></p>
+        <h1>SHADOW ARCHIVE<span class="cursor"></span></h1>
 
-    <div id="secret" style="display: none;">
-        <h2>Zugriff gewährt!</h2>
-        <a href"google.com">Test</a>
-    </div>
+        <p class="warning">
+            [!] WARNUNG: UNBEFUGTER ZUGRIFF VERBOTEN
+        </p>
+
+        <div id="login">
+            <p>
+                Eine geschützte Datei wurde gefunden.<br>
+                Bitte gib den Zugangscode ein.
+            </p>
+
+            <form class="password-area" id="loginForm">
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="ACCESS CODE..."
+                    autocomplete="off"
+                    required
+                >
+                <button type="submit">ENTSPERREN</button>
+            </form>
+
+            <p id="message" role="status"></p>
+        </div>
+
+        <div id="secret">
+            <h2 class="success">[+] ZUGRIFF GEWÄHRT</h2>
+
+            <p>
+                Identität bestätigt.<br>
+                Die geheime Datei wurde freigegeben.
+            </p>
+
+            <p>DATEI: ELYAS-NOTE01.txt</p>
+
+            <a
+                class="secret-link"
+                href="https://www.google.com"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                &gt; GEHEIME DATEI ÖFFNEN
+            </a>
+        </div>
+
+        <div class="footer">
+            &gt; CONNECTION ESTABLISHED<br>
+            &gt; WAITING FOR USER INPUT_
+        </div>
+
+    </main>
 
     <script>
-        function checkPassword() {
+        const loginForm = document.getElementById("loginForm");
 
-            let password = document.getElementById("password").value;
+        loginForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            checkPassword();
+        });
+
+        function checkPassword() {
+            const password = document.getElementById("password").value;
 
             if (password === "ELYAS") {
+                document.getElementById("login").style.display = "none";
                 document.getElementById("secret").style.display = "block";
-                document.getElementById("message").innerText = "";
-            }
-            else {
-                document.getElementById("secret").style.display = "none";
-                document.getElementById("message").innerText = "PASSWORT VERWEIGERT";
-            }
+            } else {
+                document.getElementById("message").innerText =
+                    "[ERROR] PASSWORT VERWEIGERT";
 
+                document.getElementById("password").value = "";
+                document.getElementById("password").focus();
+            }
         }
     </script>
 
